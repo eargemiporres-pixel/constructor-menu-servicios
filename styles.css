@@ -345,6 +345,32 @@ tr.drag-over-below{box-shadow:inset 0 -2px 0 0 var(--app-accent);}
   text-transform:uppercase; letter-spacing:.08em; padding:10px 4px 4px; border-bottom:none; opacity:1;
 }
 .ms-times-cat-row:first-child td{padding-top:0;}
+
+/* ===================== Compatibilidad tratamientos/coloraciones (uso interno) ===================== */
+.ms-compat{margin-top:6%;}
+.ms-compat > .ms-category-title{text-align:center;}
+.ms-compat-table{width:100%; border-collapse:collapse; font-size:9.44pt; margin-top:3%;}
+.ms-compat-table th{
+  text-align:center; font-weight:600; text-transform:uppercase; letter-spacing:.03em;
+  font-size:8.1pt; padding:3px 4px 6px; border-bottom:1.5px solid currentColor;
+}
+.ms-compat-table th:first-child{text-align:left;}
+.ms-compat-table td{padding:6px 4px; border-bottom:1px dotted currentColor; opacity:.9; vertical-align:middle;}
+.ms-compat-table td:not(.ms-compat-name){text-align:center;}
+.ms-compat-name{text-align:left;}
+.ms-compat-mark{
+  display:inline-block; width:10px; height:10px; border-radius:50%;
+  border:1.5px solid; background:transparent;
+}
+.ms-compat-mark.is-yes{border-color:#3fae6a;}
+.ms-compat-mark.is-no{border-color:#e2574c;}
+.ms-compat-legend{
+  margin-top:3%; text-align:center; font-size:8.1pt; opacity:.75;
+  display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap;
+}
+.ms-compat-legend .ms-compat-mark{margin-left:10px;}
+.ms-compat-legend .ms-compat-mark:first-child{margin-left:0;}
+
 .ms-footer{
   flex:none;
   padding:3% 6% 5%;
@@ -489,4 +515,6 @@ tr.drag-over-below{box-shadow:inset 0 -2px 0 0 var(--app-accent);}
   .ms-times-page{break-before:page; page-break-before:always;}
   .ms-times-table tr{break-inside:avoid; page-break-inside:avoid;}
   .ms-times-cat-row{break-after:avoid; page-break-after:avoid;}
+  .ms-compat-table tr{break-inside:avoid; page-break-inside:avoid;}
+  .ms-compat{break-inside:avoid; page-break-inside:avoid;}
 }

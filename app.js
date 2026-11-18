@@ -341,6 +341,42 @@ function timesGuideHtml(categories) {
         </thead>
         <tbody>${rowsHtml}</tbody>
       </table>
+      ${compatTableHtml()}
+    </div>`;
+}
+
+// Tabla de compatibilidad entre tratamientos y coloraciones (uso interno),
+// justo debajo de la guía de tiempos. Datos de referencia del equipo; solo
+// se muestran las combinaciones "completo" (las de "raíz" se han quitado a
+// petición expresa).
+const COMPAT_ROWS = [
+  { name: 'Tea Base', values: [false, false, false] },
+  { name: 'Kendi', values: [false, false, false] },
+  { name: 'Proteínas y lípidos', values: [true, true, true] },
+  { name: 'Panacea Spa o Hydracore', values: [false, false, false] },
+  { name: 'Agua de Barro', values: [true, true, true] },
+];
+const COMPAT_COLS = ['NCC completo', 'Tsuyo completo', 'Confort completo'];
+
+function compatTableHtml() {
+  const headHtml = COMPAT_COLS.map(c => `<th>${escapeHtml(c)}</th>`).join('');
+  const rowsHtml = COMPAT_ROWS.map(r => `
+    <tr>
+      <td class="ms-compat-name">${escapeHtml(r.name)}</td>
+      ${r.values.map(v => `<td><span class="ms-compat-mark ${v ? 'is-yes' : 'is-no'}"></span></td>`).join('')}
+    </tr>`).join('');
+
+  return `
+    <div class="ms-compat">
+      <div class="ms-category-title">Combinaciones de Tratamientos con Coloraciones</div>
+      <table class="ms-compat-table">
+        <thead><tr><th>Tratamiento</th>${headHtml}</tr></thead>
+        <tbody>${rowsHtml}</tbody>
+      </table>
+      <p class="ms-compat-legend">
+        <span class="ms-compat-mark is-yes"></span> Combinación indicada
+        <span class="ms-compat-mark is-no"></span> Combinación no indicada
+      </p>
     </div>`;
 }
 
