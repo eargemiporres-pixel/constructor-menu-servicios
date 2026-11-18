@@ -349,17 +349,17 @@ function timesGuideHtml(categories) {
 }
 
 // Tabla de compatibilidad entre tratamientos y coloraciones (uso interno),
-// justo debajo de la guía de tiempos. Datos de referencia del equipo; solo
-// se muestran las combinaciones "completo" (las de "raíz" se han quitado a
-// petición expresa).
+// justo debajo de la guía de tiempos. Las columnas corresponden a la
+// segunda opción (coloración + tratamiento) de cada familia de color del
+// apartado de Color: NCC + SuperBlend, Tsuyo + Kendy y Confort + SuperBlend.
 const COMPAT_ROWS = [
   { name: 'Tea Base', values: [false, false, false] },
-  { name: 'Kendi', values: [false, false, false] },
+  { name: 'Kendi', values: [false, true, true] },
   { name: 'Proteínas y lípidos', values: [true, true, true] },
-  { name: 'Panacea Spa o Hydracore', values: [false, false, false] },
+  { name: 'Panacea Spa o Hydracore', values: [true, true, true] },
   { name: 'Agua de Barro', values: [true, true, true] },
 ];
-const COMPAT_COLS = ['NCC completo', 'Tsuyo completo', 'Confort completo'];
+const COMPAT_COLS = ['NCC + SuperBlend', 'Tsuyo + Kendy', 'Confort + SuperBlend'];
 
 function compatTableHtml() {
   const headHtml = COMPAT_COLS.map(c => `<th>${escapeHtml(c)}</th>`).join('');
@@ -377,8 +377,8 @@ function compatTableHtml() {
         <tbody>${rowsHtml}</tbody>
       </table>
       <p class="ms-compat-legend">
-        <span class="ms-compat-mark is-yes"></span> Combinación indicada
-        <span class="ms-compat-mark is-no"></span> Combinación no indicada
+        <span class="ms-compat-mark is-yes"></span> Se debe trabajar esta combinación
+        <span class="ms-compat-mark is-no"></span> No se debe trabajar esta combinación
       </p>
     </div>`;
 }
