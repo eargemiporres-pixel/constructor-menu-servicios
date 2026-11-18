@@ -40,16 +40,26 @@ p{margin:0;}
 
 /* ===================== Layout ===================== */
 .layout{
-  max-width:1320px;
+  max-width:1480px;
   margin:0 auto;
   padding:28px;
   display:grid;
-  grid-template-columns:1.15fr 1fr;
+  /* minmax(0, …) evita que una columna se niegue a encoger por debajo del
+     ancho mínimo de su contenido (p. ej. la tabla de servicios) y acabe
+     empujando todo el layout fuera de la pantalla. La vista previa no
+     necesita tanto ancho como la tabla de servicios, así que se le da más
+     proporción al panel del constructor. */
+  grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);
   gap:24px;
   align-items:start;
 }
-@media (max-width:980px){
-  .layout{grid-template-columns:1fr;}
+/* "screen" y no solo max-width: una página A4 impresa mide ~794px de ancho
+   en CSS px, así que sin "screen" esta regla (y las demás de aquí abajo)
+   también se aplicarían al imprimir — y el contenido del formulario, aunque
+   quede oculto por la impresión, sigue ocupando espacio en el documento y
+   puede alargar el PDF con páginas en blanco. */
+@media screen and (max-width:980px){
+  .layout{grid-template-columns:minmax(0,1fr);}
 }
 
 .panel{
@@ -58,6 +68,7 @@ p{margin:0;}
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:22px 24px;
+  min-width:0;
 }
 .preview-panel{padding:22px 24px 28px;}
 .preview-sticky{position:sticky; top:20px;}
@@ -70,7 +81,7 @@ p{margin:0;}
 
 /* ===================== Form fields ===================== */
 .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
-@media (max-width:560px){.grid-2{grid-template-columns:1fr;}}
+@media screen and (max-width:560px){.grid-2{grid-template-columns:1fr;}}
 .field{display:flex; flex-direction:column; gap:6px; font-size:.82rem; color:var(--app-muted);}
 .field input, input[type=text], input[type=number]{
   font-family:inherit;
@@ -139,7 +150,7 @@ p{margin:0;}
 
 /* ===================== Table ===================== */
 .table-wrap{overflow-x:auto; border:1px solid var(--app-border); border-radius:10px;}
-#servicesTable{border-collapse:collapse; width:100%; min-width:1080px;}
+#servicesTable{border-collapse:collapse; width:100%; min-width:950px;}
 #servicesTable thead th{
   background:#f8f4ea;
   color:var(--app-accent-dark);
@@ -151,8 +162,8 @@ p{margin:0;}
   border-bottom:1px solid var(--app-border);
 }
 #servicesTable thead th span{font-size:.62rem; text-transform:none; color:var(--app-muted);}
-.col-name{text-align:left !important; min-width:300px;}
-.col-cat{min-width:160px;}
+.col-name{text-align:left !important; min-width:220px;}
+.col-cat{min-width:130px;}
 #servicesTable tbody td{padding:6px 6px; border-bottom:1px solid #f0ece2; vertical-align:middle;}
 #servicesTable tbody tr:last-child td{border-bottom:none;}
 #servicesTable tbody tr.is-inactive{opacity:.45;}
@@ -168,6 +179,11 @@ p{margin:0;}
   width:78px; text-align:center; font-weight:700; color:var(--app-accent-dark);
   border-color:var(--app-border);
 }
+/* Quita las flechas del input numérico: en una caja tan estrecha se comen
+   espacio que hace falta para el propio precio. */
+.row-price-input::-webkit-outer-spin-button,
+.row-price-input::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+.row-price-input{-moz-appearance:textfield;}
 .row-price-input.is-manual{
   border-color:var(--app-accent); background:#fdf6e6; color:#7c611f;
 }
@@ -423,30 +439,31 @@ tr.drag-over-below{box-shadow:inset 0 -2px 0 0 var(--app-accent);}
 .page-footer{text-align:center; padding:20px; color:var(--app-muted); font-size:.78rem;}
 
 /* ===================== Mobile (services as cards) ===================== */
-@media (max-width:700px){
-  .topbar{padding:16px 16px;}
-  .topbar-inner{gap:12px;}
-  .topbar-logo{height:42px;}
-  .topbar-text h1{font-size:1.1rem;}
-  .topbar-text p{font-size:.8rem;}
-
-  .layout{padding:14px; gap:14px;}
-  .panel{padding:16px;}
-
-  /* Prevent iOS Safari from auto-zooming the page when a field is focused. */
-  input[type=text], input[type=number]{font-size:16px;}
-
+/* La tabla de servicios tiene demasiadas columnas para caber cómoda en
+   nada más estrecho que un portátil grande, así que se convierte en
+   tarjetas apiladas en todo el rango de un solo panel por fila (el mismo
+   punto de corte que colapsa el layout de 2 columnas a 1), no solo en
+   teléfono — si no, en tablet quedaría una tabla apretada con scroll
+   horizontal en vez de algo cómodo de leer. "screen": ver la nota sobre
+   @page A4 (~794px) más arriba, en el primer @media de .layout. */
+@media screen and (max-width:980px){
+  /* Todo aquí va con el id #servicesTable por dos motivos: (1) gana en
+     especificidad a su propio min-width:1080px de fuera del media query,
+     y (2) evita que estas reglas "table/tr/td genéricos" se cuelen en las
+     tablas internas del PDF (guía de tiempos, compatibilidad), que también
+     son <table> y cuyo ancho de página (A4, ~794px) cae dentro de este
+     mismo punto de corte al imprimir. */
   .table-wrap{overflow-x:visible; border:none;}
-  table{min-width:0; width:100%;}
-  thead{display:none;}
-  tbody{display:block;}
+  #servicesTable{min-width:0; width:100%;}
+  #servicesTable thead{display:none;}
+  #servicesTable tbody{display:block;}
 
-  tr{
+  #servicesTable tr{
     display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px;
     background:#fdfcf9; border:1px solid var(--app-border); border-radius:12px;
     padding:12px; margin-bottom:12px;
   }
-  td{padding:0; border:none;}
+  #servicesTable td{padding:0; border:none;}
 
   .col-check{order:1;}
   .col-color{order:2;}
@@ -457,8 +474,8 @@ tr.drag-over-below{box-shadow:inset 0 -2px 0 0 var(--app-accent);}
   .row-actions{gap:2px;}
   .order-btn{font-size:1rem; padding:6px 6px;}
   .del-btn{font-size:1.1rem; padding:6px 8px;}
-  /* El arrastrar y soltar HTML5 no funciona bien por táctil: en móvil solo
-     quedan las flechas ↑ ↓, que ya son cómodas de tocar. */
+  /* El arrastrar y soltar HTML5 no funciona bien por táctil: en pantallas
+     táctiles solo quedan las flechas ↑ ↓, que ya son cómodas de tocar. */
   .drag-handle{display:none;}
 
   .col-cat{order:5; flex:1 1 100%;}
@@ -474,14 +491,28 @@ tr.drag-over-below{box-shadow:inset 0 -2px 0 0 var(--app-accent);}
   }
   .cell-price{text-align:right;}
   .cell-price .price-cell{justify-content:flex-end;}
-  .cell-price .row-price-input{width:72px;}
+  .cell-price .row-price-input{width:92px;}
   .recommended-hint{white-space:normal; text-align:right;}
 
-  td[data-label]::before{
+  #servicesTable td[data-label]::before{
     content:attr(data-label);
     display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.03em;
     color:var(--app-muted); margin-bottom:3px;
   }
+}
+
+@media screen and (max-width:700px){
+  .topbar{padding:16px 16px;}
+  .topbar-inner{gap:12px;}
+  .topbar-logo{height:42px;}
+  .topbar-text h1{font-size:1.1rem;}
+  .topbar-text p{font-size:.8rem;}
+
+  .layout{padding:14px; gap:14px;}
+  .panel{padding:16px;}
+
+  /* Prevent iOS Safari from auto-zooming the page when a field is focused. */
+  input[type=text], input[type=number]{font-size:16px;}
 
   .preview-frame{max-height:none;}
   .menu-sheet-scale{max-width:340px;}
