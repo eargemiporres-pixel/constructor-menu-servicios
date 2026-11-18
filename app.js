@@ -14,62 +14,68 @@ const RATES = [0.85, 0.95, 1.10];
    precio manual de partida (editable, y siempre se puede volver al automático). */
 const DEFAULT_SERVICES = [
   // 1. Servicios de corte · CUT&DESIGN
-  { name: 'Corte de caballero', category: 'Cortes · Cut&Design', color: '#a9862e', active: true, tApp: 15, tExp: 0, tWash: 3, manualPrice: null },
-  { name: 'Corte de señora', category: 'Cortes · Cut&Design', color: '#a9862e', active: true, tApp: 25, tExp: 0, tWash: 5, manualPrice: null },
+  { name: 'Corte de caballero', category: 'Cortes · Cut&Design', color: '#a9862e', active: true, tApp: 20, tExp: 0, tWash: 5, manualPrice: null },
+  { name: 'Corte de señora - corto', category: 'Cortes · Cut&Design', color: '#a9862e', active: true, tApp: 35, tExp: 0, tWash: 10, manualPrice: null, desc: 'Corte, lavado y peinado incluidos.' },
+  { name: 'Corte de señora - medio/largo', category: 'Cortes · Cut&Design', color: '#a9862e', active: true, tApp: 40, tExp: 0, tWash: 10, manualPrice: null, desc: 'Corte, lavado y peinado incluidos.' },
 
   // 2. Servicios de color
-  { name: 'Coloración en Óleo NCC (Mousse Choice)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 5, manualPrice: null },
-  { name: 'Color NCC + Tratamiento (Mousse Choice + Lípidos)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 5, manualPrice: null },
-  { name: 'Coloración en crema (Tsubaki Cream)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 5, manualPrice: 55.00 },
-  { name: 'Coloración en crema Tsuyo + Tratamiento (Aceite de Kendy)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 5, manualPrice: 55.00 },
-  { name: 'Coloración en gel Confort Color (Gelatine Butter)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 5, manualPrice: 59.00 },
-  { name: 'Color Confort + Tratamiento (Gelatine Butter + Lípidos)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 5, manualPrice: 59.00 },
-  { name: 'Coloración de Barros Yukiro (Mud Therapy Color)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 5, manualPrice: 80.00 },
-  { name: 'Servicio de Color + Mechas (Raíz Tsuyo + mechas Cream Light)', category: 'Color', color: '#8a2942', active: true, tApp: 30, tExp: 40, tWash: 5, manualPrice: 90.00 },
+  { name: 'Coloración en Óleo NCC (Mousse Choice)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 20, manualPrice: null, desc: 'Incluye lavado previo, aplicación del color, acondicionador y masaje final.' },
+  { name: 'Color NCC + SuperBlend (Mousse Choice + Proteínas y Lípidos)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 20, manualPrice: null, desc: 'Incluye lavado previo, aplicación del color y tratamiento SuperBlend con aclarado final.' },
+  { name: 'Coloración en crema (Tsubaki Cream)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 10, manualPrice: 55.00, desc: 'Incluye aplicación del color y masaje final.' },
+  { name: 'Coloración en crema Tsuyo + Kendy (Tsubaki Cream + Aceite de Kendy)', category: 'Color', color: '#8a2942', active: true, tApp: 20, tExp: 35, tWash: 20, manualPrice: 55.00, desc: 'Incluye aplicación del color junto con el tratamiento Kendy, turbante caliente y aclarado final.' },
+  { name: 'Coloración en Gel Confort Color (Gelatine Butter)', category: 'Color', color: '#8a2942', active: true, tApp: 15, tExp: 40, tWash: 15, manualPrice: 59.00, desc: 'Incluye lavado previo y posterior, acondicionador y masaje.' },
+  { name: 'Color Confort + SuperBlend (Gelatine Butter + Proteínas y Lípidos)', category: 'Color', color: '#8a2942', active: true, tApp: 20, tExp: 40, tWash: 15, manualPrice: 59.00, desc: 'Incluye aplicación del color y tratamiento SuperBlend con gorro térmico y aclarado final.' },
+  { name: 'Coloración de Barros Yukiro (Mud Therapy Color)', category: 'Color', color: '#8a2942', active: true, tApp: 30, tExp: 30, tWash: 15, manualPrice: 80.00, desc: 'Incluye aplicación con masaje de pindas y aclarado con acondicionador.' },
+  { name: 'Servicio de Color + Mechas (Raiz/Cremiento Tsuyo + Puntos de luz Cream Light)', category: 'Color', color: '#8a2942', active: true, tApp: 30, tExp: 30, tWash: 15, manualPrice: 90.00, desc: 'Coloración de raíz/crecimiento con puntos de luz; incluye regulación de la porosidad en el aclarado.' },
 
   // 0. Matización
-  { name: 'Matización única + tratamiento Blend', category: 'Matización', color: '#c9a35c', active: true, tApp: 5, tExp: 20, tWash: 5, manualPrice: null },
-  { name: 'Matización en Óleo (Gloss Color) + tratamiento Blend', category: 'Matización', color: '#c9a35c', active: true, tApp: 5, tExp: 20, tWash: 5, manualPrice: null },
-  { name: 'Matización en Gel (Gelatine Gloss Therapy) + tratamiento Blend', category: 'Matización', color: '#c9a35c', active: true, tApp: 5, tExp: 20, tWash: 5, manualPrice: null },
+  { name: 'Matización en Óleo (Mousse Choice) + Tratamiento SuperBlend', category: 'Matización', color: '#c9a35c', active: true, tApp: 15, tExp: 15, tWash: 5, manualPrice: null, desc: 'Aplicación, exposición y aclarado final.' },
+  { name: 'Matización en Crema (Tsubaki Cream) + Tratamiento SuperBlend', category: 'Matización', color: '#c9a35c', active: true, tApp: 15, tExp: 15, tWash: 5, manualPrice: null, desc: 'Aplicación, exposición y aclarado final.' },
+  { name: 'Matización en Gel (Gelatine Gloss Therapy) + Tratamiento SuperBlend', category: 'Matización', color: '#c9a35c', active: true, tApp: 15, tExp: 15, tWash: 5, manualPrice: null, desc: 'Aplicación, exposición y aclarado final.' },
 
   // 3. Servicio de Mechas
-  { name: 'Puntos de luz (soft lights) con Matiz y Blend Treatment + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 60, tExp: 50, tWash: 5, manualPrice: null },
-  { name: 'Servicio de Mechas (Care Blond Therapy) con Matiz y Blend Treatment + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 150, tExp: 50, tWash: 5, manualPrice: null },
-  { name: 'Servicio de Mechas con Matiz y Blend Treatment + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 180, tExp: 50, tWash: 5, manualPrice: null },
-  { name: 'Servicio Airtouch LightCode con Blend Treatment + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 210, tExp: 20, tWash: 5, manualPrice: 300.00 },
-  { name: 'Servicio Airtouch Reverse con Blend Treatment + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 210, tExp: 20, tWash: 5, manualPrice: 300.00 },
-  { name: 'Servicio Airtouch Double con Blend Treatment + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 210, tExp: 20, tWash: 5, manualPrice: 300.00 },
+  { name: 'Retoques Puntos de luz (Care Blond Therapy) con Matiz y SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 60, tExp: 50, tWash: 10, manualPrice: null, desc: 'Incluye montaje, matiz, exposición y regulación de la porosidad en el aclarado.' },
+  { name: 'Servicio de Mechas (Care Blond Therapy) con Matiz y SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 150, tExp: 50, tWash: 10, manualPrice: null, desc: 'Incluye montaje completo, matiz y tratamiento SuperBlend con gorro térmico.' },
+  { name: 'Servicio de Mechas (Care Blond Therapy) con Matiz y Blend Treatment + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 180, tExp: 50, tWash: 10, manualPrice: null, desc: 'Incluye montaje completo, matiz y tratamiento Blend con gorro térmico.' },
+  { name: 'Servicio Airtouch LightCode con SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 210, tExp: 20, tWash: 10, manualPrice: 300.00, desc: 'Montaje con secador, matiz y tratamiento SuperBlend con protector.' },
+  { name: 'Servicio Airtouch Reverse con SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 210, tExp: 20, tWash: 10, manualPrice: 300.00, desc: 'Montaje con secador, matiz y tratamiento SuperBlend con protector.' },
+  { name: 'Servicio Airtouch Double con SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 210, tExp: 20, tWash: 10, manualPrice: 300.00, desc: 'Montaje con secador, matiz y tratamiento SuperBlend con protector.' },
 
   // 4. Servicios de Tratamientos
-  { name: 'Servicio de Cuero Cabelludo (Wellness Therapy Teabase)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 15, tExp: 15, tWash: 10, manualPrice: null },
-  { name: 'Hidratación con línea Hydracore (Wellness Therapy Hydracore)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 15, tExp: 15, tWash: 10, manualPrice: null },
-  { name: 'Nutrición con línea Spa (Wellness Therapy & Spa)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 15, tExp: 15, tWash: 10, manualPrice: null },
-  { name: 'Hidratación con aceite de Kendy (Wellness Therapy Kendy Caliente)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 15, tExp: 15, tWash: 10, manualPrice: 42.00 },
-  { name: 'Hidratación con Panacea (Wellness Therapy Panacea)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 15, tExp: 15, tWash: 10, manualPrice: 42.00 },
+  { name: 'Superblend (proteinas y lípidos)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 5, tExp: 0, tWash: 0, manualPrice: 20.00, desc: 'Se aplica tras el lavado con masaje y gorro térmico, dejando actuar entre 5 y 10 minutos.' },
+  { name: 'Kendy (Aceite, siempre con Tsuyo)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 5, tExp: 0, tWash: 0, manualPrice: 25.00, desc: 'Se aplica junto con la coloración, dejándolo actuar mientras procesa el color.' },
+  { name: 'Servicio de Cuero Cabelludo con línea Teabase (Wellness Therapy Teabase)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 15, tExp: 15, tWash: 10, manualPrice: null, desc: 'Aplicación, exposición y aclarado con acondicionador.' },
+  { name: 'Hidratación con línea Hydracore (Wellness Therapy Hydracore)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 15, tExp: 15, tWash: 10, manualPrice: null, desc: 'Aplicación, exposición y aclarado con acondicionador.' },
+  { name: 'Nutrición con línea Spa (Wellness Therapy & Spa)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 15, tExp: 15, tWash: 10, manualPrice: null, desc: 'Aplicación, exposición y aclarado con acondicionador.' },
+  { name: 'Hidratación con Aceite de Kendy (Wellness Therapy Kendy Caliente)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 15, tExp: 15, tWash: 10, manualPrice: 42.00, desc: 'Aceite en cabello seco antes del champú, tratamiento caliente con turbante y aclarado final.' },
+  { name: 'Hidratación con Panacea (Wellness Therapy Panacea)', category: 'Tratamientos', color: '#2f6f5e', active: true, tApp: 15, tExp: 15, tWash: 10, manualPrice: 42.00, desc: 'Mismo proceso que el tratamiento con Kendy, sin turbante caliente.' },
 
   // 5. Servicio de Secado · DRY & STYLE
-  { name: 'Dry Express', category: 'Secado · Dry & Style', color: '#b5651d', active: true, tApp: 10, tExp: 0, tWash: 5, manualPrice: null },
-  { name: 'Dry & Style: corto', category: 'Secado · Dry & Style', color: '#b5651d', active: true, tApp: 20, tExp: 0, tWash: 5, manualPrice: null },
-  { name: 'Dry & Style: medio', category: 'Secado · Dry & Style', color: '#b5651d', active: true, tApp: 20, tExp: 0, tWash: 5, manualPrice: null },
-  { name: 'Dry & Style: largo', category: 'Secado · Dry & Style', color: '#b5651d', active: true, tApp: 30, tExp: 0, tWash: 5, manualPrice: null },
-  { name: 'Dry & Style: XL', category: 'Secado · Dry & Style', color: '#b5651d', active: true, tApp: 45, tExp: 0, tWash: 5, manualPrice: null },
+  { name: 'Dry Express', category: 'Secado · Dry & Style', color: '#b5651d', active: true, tApp: 10, tExp: 0, tWash: 10, manualPrice: null },
+  { name: 'Dry & Style: corto', category: 'Secado · Dry & Style', color: '#b5651d', active: true, tApp: 20, tExp: 0, tWash: 10, manualPrice: null },
+  { name: 'Dry & Style: medio', category: 'Secado · Dry & Style', color: '#b5651d', active: true, tApp: 20, tExp: 0, tWash: 10, manualPrice: null },
+  { name: 'Dry & Style: largo', category: 'Secado · Dry & Style', color: '#b5651d', active: true, tApp: 30, tExp: 0, tWash: 10, manualPrice: null },
+  { name: 'Dry & Style: XL', category: 'Secado · Dry & Style', color: '#b5651d', active: true, tApp: 45, tExp: 0, tWash: 10, manualPrice: null },
 
   // 6. Forma · SHAPE CONTROL (moldeado)
-  { name: 'Shape corto', category: 'Forma · Shape Control', color: '#3d5a80', active: true, tApp: 30, tExp: 15, tWash: 5, manualPrice: null },
-  { name: 'Shape medio', category: 'Forma · Shape Control', color: '#3d5a80', active: true, tApp: 45, tExp: 15, tWash: 5, manualPrice: null },
-  { name: 'Shape largo', category: 'Forma · Shape Control', color: '#3d5a80', active: true, tApp: 60, tExp: 15, tWash: 5, manualPrice: null },
+  { name: 'Shape corto', category: 'Forma · Shape Control', color: '#3d5a80', active: true, tApp: 30, tExp: 20, tWash: 10, manualPrice: null },
+  { name: 'Shape medio', category: 'Forma · Shape Control', color: '#3d5a80', active: true, tApp: 40, tExp: 20, tWash: 10, manualPrice: null },
+  { name: 'Shape largo', category: 'Forma · Shape Control', color: '#3d5a80', active: true, tApp: 45, tExp: 20, tWash: 10, manualPrice: null },
 
   // 7. SMOOTH RITUAL (alisados y laminados)
-  { name: 'Smooth Straightening (laminado)', category: 'Smooth Ritual · Alisados', color: '#4a1942', active: true, tApp: 60, tExp: 30, tWash: 10, manualPrice: null },
-  { name: 'Alisado Biosfera', category: 'Smooth Ritual · Alisados', color: '#4a1942', active: true, tApp: 90, tExp: 90, tWash: 15, manualPrice: 250.00 },
+  { name: 'Smooth Straightening (Laminado)', category: 'Smooth Ritual · Alisados', color: '#4a1942', active: true, tApp: 80, tExp: 30, tWash: 10, manualPrice: null, desc: 'Incluye lavado, secado, tiempo de exposición del producto, planchado y finalización.' },
+  { name: 'Alisado Biosfera', category: 'Smooth Ritual · Alisados', color: '#4a1942', active: true, tApp: 90, tExp: 105, tWash: 15, manualPrice: 250.00, desc: 'Incluye lavado, secado, aplicación del producto, exposición y planchado; el tiempo total varía según el grosor y largo del cabello.' },
 
   // 8. SERVICIOS VIBBRO
-  { name: 'Teadhara Experience', category: 'Servicios Vibbro', color: '#d1495b', active: true, tApp: 30, tExp: 0, tWash: 5, manualPrice: 60.00 },
-  { name: 'Cascada Hidratante', category: 'Servicios Vibbro', color: '#d1495b', active: true, tApp: 45, tExp: 0, tWash: 5, manualPrice: 67.00 },
-  { name: 'Elixir Hair & Body', category: 'Servicios Vibbro', color: '#d1495b', active: true, tApp: 60, tExp: 0, tWash: 5, manualPrice: 80.00 },
-  { name: 'Mud Experience Scalp & Face', category: 'Servicios Vibbro', color: '#d1495b', active: true, tApp: 60, tExp: 0, tWash: 5, manualPrice: 80.00 },
+  { name: 'Teadhara Experience', category: 'Servicios Vibbro', color: '#d1495b', active: true, tApp: 30, tExp: 0, tWash: 10, manualPrice: 60.00 },
+  { name: 'Cascada Hidratante', category: 'Servicios Vibbro', color: '#d1495b', active: true, tApp: 45, tExp: 0, tWash: 10, manualPrice: 67.00 },
+  { name: 'Elixir Hair & Body', category: 'Servicios Vibbro', color: '#d1495b', active: true, tApp: 60, tExp: 0, tWash: 10, manualPrice: 80.00 },
+  { name: 'Mud Experience Scalp & Face', category: 'Servicios Vibbro', color: '#d1495b', active: true, tApp: 60, tExp: 0, tWash: 10, manualPrice: 80.00 },
 // Los servicios que ya traían un precio pactado en el documento guardan ese
 // mismo valor como "recomendado", visible aunque luego se edite o se resetee.
+// "desc" es el texto que explica qué incluye el servicio, dictado por el
+// salón: solo se añadió donde hay información concreta, para no inventar
+// contenido de cara al cliente.
 ].map(s => ({ ...s, recommendedPrice: s.manualPrice })).map(withId);
 
 function withId(s) { return { id: uid(), ...s }; }
@@ -299,7 +305,10 @@ function rowHtml(s) {
   return `
     <div class="ms-row">
       <span class="ms-row-dot" style="background:${s.color || '#a9862e'}"></span>
-      <span class="ms-row-text"><span class="ms-row-name">${escapeHtml(s.name || 'Servicio')}</span> <span class="ms-row-meta">${formatDuration(duration(s))}</span></span>
+      <span class="ms-row-text">
+        <span class="ms-row-name">${escapeHtml(s.name || 'Servicio')}</span> <span class="ms-row-meta">${formatDuration(duration(s))}</span>
+        ${s.desc ? `<span class="ms-row-desc">${escapeHtml(s.desc)}</span>` : ''}
+      </span>
       <span class="ms-row-fill"></span>
       <span class="ms-row-price">${formatPrice(price(s))}</span>
     </div>`;
