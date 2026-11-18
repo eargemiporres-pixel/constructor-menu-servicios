@@ -34,7 +34,7 @@ const DEFAULT_SERVICES = [
   // 3. Servicio de Mechas
   { name: 'Retoques Puntos de luz (Care Blond Therapy) con Matiz y SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 60, tExp: 50, tWash: 10, manualPrice: null, desc: 'Montaje: 60 min. Exposición del matiz y SuperBlend: 50 min. Lavado regulando la porosidad en el aclarado: 10 min.' },
   { name: 'Servicio de Mechas (Care Blond Therapy) con Matiz y SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 150, tExp: 50, tWash: 10, manualPrice: null, desc: 'Montaje (lavado, regulación de porosidad y aplicación del matiz): 150 min. Exposición: 50 min. Aclarado final con SuperBlend y gorro térmico: 10 min.' },
-  { name: 'Mechas medias: Servicio de Mechas (Care Blond Therapy) con Matiz y Blend Treatment + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 180, tExp: 50, tWash: 10, manualPrice: null, desc: 'Montaje (lavado, regulación de porosidad y aplicación del matiz): 180 min. Exposición: 50 min. Aclarado final con tratamiento Blend y gorro térmico: 10 min.' },
+  { name: 'Mechas medias: Servicio de Mechas (Care Blond Therapy) con Matiz y SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 180, tExp: 50, tWash: 10, manualPrice: null, desc: 'Montaje (lavado, regulación de porosidad y aplicación del matiz): 180 min. Exposición: 50 min. Aclarado final con SuperBlend y gorro térmico: 10 min.' },
   { name: 'Mechas largas: Servicio Airtouch LightCode con SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 210, tExp: 20, tWash: 10, manualPrice: 300.00, desc: 'Montaje con secador: 210 min. Exposición del matiz y SuperBlend: 20 min. Aclarado final con protector: 10 min.' },
   { name: 'Servicio Airtouch Reverse con SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 210, tExp: 20, tWash: 10, manualPrice: 300.00, desc: 'Montaje con secador: 210 min. Exposición del matiz y SuperBlend: 20 min. Aclarado final con protector: 10 min.' },
   { name: 'Servicio Airtouch Double con SuperBlend + Protector', category: 'Mechas', color: '#6b2c91', active: true, tApp: 210, tExp: 20, tWash: 10, manualPrice: 300.00, desc: 'Montaje con secador: 210 min. Exposición del matiz y SuperBlend: 20 min. Aclarado final con protector: 10 min.' },
@@ -151,7 +151,8 @@ const el = {
   categoryManager: document.getElementById('categoryManager'),
   addServiceBtn: document.getElementById('addServiceBtn'),
   resetBtn: document.getElementById('resetBtn'),
-  printBtn: document.getElementById('printBtn'),
+  printTeamBtn: document.getElementById('printTeamBtn'),
+  printClientBtn: document.getElementById('printClientBtn'),
   menuSheet: document.getElementById('menuSheet'),
   printSheetWrap: document.getElementById('printSheetWrap'),
 };
@@ -257,7 +258,7 @@ function rowTemplate(s, index, total) {
     </tr>`;
 }
 
-function renderMenuSheet(target) {
+function renderMenuSheet(target, opts = {}) {
   target.setAttribute('data-sheet-theme', state.theme);
 
   const active = state.services.filter(s => s.active);
@@ -285,7 +286,7 @@ function renderMenuSheet(target) {
   const categoriesHtml = categories.map(g => `
     <div class="ms-category">
       <div class="ms-category-title">${escapeHtml(g.name)}</div>
-      ${g.items.map(rowHtml).join('')}
+      ${g.items.map(s => rowHtml(s, opts)).join('')}
     </div>`).join('');
 
   target.innerHTML = `
@@ -296,16 +297,18 @@ function renderMenuSheet(target) {
     </div>
     <div class="ms-body">${categoriesHtml}</div>
     <div class="ms-footer">Muttto Lab · El viaje del estilista · ${new Date().toLocaleDateString('es-ES')}</div>
-    ${timesGuideHtml(categories)}`;
+    ${opts.client ? '' : timesGuideHtml(categories)}`;
 }
 
-function rowHtml(s) {
+// opts.client = true: versión limpia para el cliente final, solo nombre y
+// precio (sin duración ni descripción, que son información interna).
+function rowHtml(s, opts = {}) {
   return `
     <div class="ms-row">
       <span class="ms-row-dot" style="background:${s.color || '#a9862e'}"></span>
       <span class="ms-row-text">
-        <span class="ms-row-name">${escapeHtml(s.name || 'Servicio')}</span> <span class="ms-row-meta">${formatDuration(duration(s))}</span>
-        ${s.desc ? `<span class="ms-row-desc">${escapeHtml(s.desc)}</span>` : ''}
+        <span class="ms-row-name">${escapeHtml(s.name || 'Servicio')}</span>${opts.client ? '' : ` <span class="ms-row-meta">${formatDuration(duration(s))}</span>`}
+        ${(!opts.client && s.desc) ? `<span class="ms-row-desc">${escapeHtml(s.desc)}</span>` : ''}
       </span>
       <span class="ms-row-fill"></span>
       <span class="ms-row-price">${formatPrice(price(s))}</span>
@@ -577,7 +580,7 @@ el.resetBtn.addEventListener('click', () => {
   renderAll();
 });
 
-el.printBtn.addEventListener('click', () => {
+function printMenu(opts) {
   const active = state.services.filter(s => s.active);
   if (active.length === 0) {
     alert('Selecciona al menos un servicio antes de imprimir el menú.');
@@ -587,7 +590,7 @@ el.printBtn.addEventListener('click', () => {
   sheet.className = 'menu-sheet';
   el.printSheetWrap.innerHTML = '';
   el.printSheetWrap.appendChild(sheet);
-  renderMenuSheet(sheet);
+  renderMenuSheet(sheet, opts);
   // El navegador usa el <title> del documento como encabezado/pie por
   // defecto al imprimir (si la persona no lo desactiva en el diálogo de
   // impresión). Lo cambiamos solo durante la impresión para que, si aparece,
@@ -604,7 +607,10 @@ el.printBtn.addEventListener('click', () => {
   // the price column.
   const ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
   ready.then(() => requestAnimationFrame(() => window.print()));
-});
+}
+
+el.printTeamBtn.addEventListener('click', () => printMenu({ client: false }));
+el.printClientBtn.addEventListener('click', () => printMenu({ client: true }));
 
 /* --------------------------------- Init ----------------------------------- */
 
