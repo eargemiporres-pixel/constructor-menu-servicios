@@ -349,17 +349,17 @@ function timesGuideHtml(categories) {
 }
 
 // Tabla de compatibilidad entre tratamientos y coloraciones (uso interno),
-// justo debajo de la guía de tiempos. Las columnas corresponden a la
-// segunda opción (coloración + tratamiento) de cada familia de color del
-// apartado de Color: NCC + SuperBlend, Tsuyo + Kendy y Confort + SuperBlend.
+// justo debajo de la guía de tiempos. Para cada familia de color se
+// muestran sus dos opciones: coloración + tratamiento (NCC + SuperBlend,
+// Tsuyo + Kendy, Confort + SuperBlend) y coloración completa sola.
 const COMPAT_ROWS = [
-  { name: 'Tea Base', values: [false, false, false] },
-  { name: 'Kendi', values: [false, true, true] },
-  { name: 'Proteínas y lípidos', values: [true, true, true] },
-  { name: 'Panacea Spa o Hydracore', values: [true, true, true] },
-  { name: 'Agua de Barro', values: [true, true, true] },
+  { name: 'Tea Base', values: [false, false, false, false, false, false] },
+  { name: 'Kendi', values: [false, false, true, false, true, false] },
+  { name: 'Proteínas y lípidos', values: [true, true, true, true, true, true] },
+  { name: 'Panacea Spa o Hydracore', values: [true, false, true, false, true, false] },
+  { name: 'Agua de Barro', values: [true, true, true, true, true, true] },
 ];
-const COMPAT_COLS = ['NCC + SuperBlend', 'Tsuyo + Kendy', 'Confort + SuperBlend'];
+const COMPAT_COLS = ['NCC + SuperBlend', 'NCC completo', 'Tsuyo + Kendy', 'Tsuyo completo', 'Confort + SuperBlend', 'Confort completo'];
 
 function compatTableHtml() {
   const headHtml = COMPAT_COLS.map(c => `<th>${escapeHtml(c)}</th>`).join('');
